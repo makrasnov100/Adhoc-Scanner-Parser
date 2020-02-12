@@ -18,6 +18,17 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\Parser.h" />
+    <ClInclude Include="Headers\Scanner.h" />
+    <ClInclude Include="Headers\Token.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Parser.cpp" />
+    <ClCompile Include="Source\Scanner.cpp" />
+    <ClCompile Include="Source\Source.cpp" />
+    <ClCompile Include="Source\Token.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{3AB0F4D9-9678-4B97-A9EA-06DC82ED1CA2}</ProjectGuid>
@@ -143,17 +154,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\vscoded\Parser.cpp" />
-    <ClCompile Include="..\..\..\vscoded\Scanner.cpp" />
-    <ClCompile Include="..\..\..\vscoded\Source.cpp" />
-    <ClCompile Include="..\..\..\vscoded\Token.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\vscoded\Parser.h" />
-    <ClInclude Include="..\..\..\vscoded\Scanner.h" />
-    <ClInclude Include="..\..\..\vscoded\Token.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
