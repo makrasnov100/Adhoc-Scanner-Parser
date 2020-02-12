@@ -8,7 +8,7 @@
 int main()
 {
     //TODO: replace with classes
-    std::string enumStr[] = {"assign", "plus", "minus", "times", "division", "lparen", "rparen", "id", "read", "write", "number", "error"};
+    std::string enumStr[] = {"assign", "plus", "minus", "times", "division", "lparen", "rparen", "id", "read", "write", "number", "error", "end"};
 
     //Scanner* scanner = new Scanner();
     Scanner scanner;
@@ -20,7 +20,7 @@ int main()
         "//asdasd asdasd//*/"
         "sum := A + B\n"
         "write sum\n"
-        "write sum / 2\n"; 
+        "write sum / 2$$\n"; 
 
     std::vector<TokenType> tokens = scanner.PerformScan(programText);
 
