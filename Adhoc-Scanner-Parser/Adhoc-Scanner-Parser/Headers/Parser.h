@@ -4,17 +4,35 @@
 #include <string>
 #include <vector>
 
-enum ContextFreeGrammarTerms {program, stmt_list, stmt, expr, term_tail, term, factor_tail, factor, add_op, mult_op};
+enum MsgType {Info,Warning,Error,Success};
 
 class Parser
 {
-public:
-    Parser();
+private:
+	int level;
+	bool showParseWarnings;
 
-	std::vector<ContextFreeGrammarTerms> PerformParse(std::vector <TokenType> programText);
+public:
+
+    Parser(bool showParseWarnings);
+
+	void PerformParse(std::vector <TokenType> programText);
 
 	//Check for specific term types
+	void Parser::ProccessProgram(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessStmtList(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessStmt(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessExpr(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessTermTail(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessTerm(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessFactorTail(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessFactor(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessAddOp(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessMultOp(int& idx, std::vector<TokenType>& tokens);
+	void Parser::ProccessEnd(int& idx, std::vector<TokenType>& tokens);
 
+	//Console Utilities
+	void Parser::PreExitMessage(MsgType type, std::string msg);
 };
 
 #endif

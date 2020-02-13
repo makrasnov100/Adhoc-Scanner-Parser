@@ -56,18 +56,6 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
                     return tokens;
                 }
                 break;
-			case '$':
-				counter++;
-				if (counter < text.size() && text[counter] == '$')
-				{
-					tokens.push_back(end);
-				}
-				else
-				{
-					tokens.push_back(error);
-					return tokens;
-				}
-				break;
             case '/':
                 counter++;
                 if(counter < text.size() && (text[counter] == '/' || text[counter] == '*'))
@@ -166,6 +154,9 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
         }
         counter++;
     }
+
+    //write an end of program token for parser to use
+    tokens.push_back(end);
 
     return tokens;
 }
