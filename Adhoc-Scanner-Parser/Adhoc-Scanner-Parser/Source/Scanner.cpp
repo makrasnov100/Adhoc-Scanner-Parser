@@ -3,18 +3,19 @@
 #include <string>
 #include <vector>
 #include <cctype>   //isdigit
+#include <iostream>
 
 Scanner::Scanner()
 {
     //Setup Scanner
 }
 
-std::vector<TokenType> Scanner::PerformScan(std::string text)
+std::vector<Token> Scanner::PerformScan(std::string text)
 {
-    //Used Psuedo code provided in text book (Figure 2.5)
+    //Reference: Used Psuedo code provided in text book (Figure 2.5)
 
     //Variables keeping track of the scanning progress
-    std::vector<TokenType> tokens;
+    std::vector<Token> tokens;
     int counter = 0;
 
     //Skip initial white space
@@ -30,29 +31,29 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
         switch (text[counter])
         {
             case '(':
-                tokens.push_back(lparen);
+                tokens.push_back(Token(text.substr(counter, 1), lparen));
                 break;
             case ')':
-                tokens.push_back(rparen);
+                tokens.push_back(Token(text.substr(counter, 1), rparen));
                 break;
             case '+':
-                tokens.push_back(plus);
+                tokens.push_back(Token(text.substr(counter, 1), plus));
                 break;
             case '-':
-                tokens.push_back(minus);
+                tokens.push_back(Token(text.substr(counter, 1), minus));
                 break;
             case '*':
-                tokens.push_back(times);
+                tokens.push_back(Token(text.substr(counter, 1), times));
                 break;
             case ':':
                 counter++;
                 if(counter < text.size() && text[counter] == '=') 
                 {
-                    tokens.push_back(assign);
+                    tokens.push_back(Token(text.substr(counter-1, 2), assign));
                 } 
                 else 
                 {
-                    tokens.push_back(error);
+                    tokens.push_back(Token("", error));
                     return tokens;
                 }
                 break;
@@ -65,24 +66,27 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
                 else
                 {
                     counter--;
-                    tokens.push_back(division);
+                    tokens.push_back(Token(text.substr(counter, 1), division));
                 }
                 break;
             case '.':
+            {
+                int startCounter = counter;
                 counter++;
                 //check if first character after decimal is a digit
-                if(counter < text.size() && isdigit(text[counter]))
+                if (counter < text.size() && isdigit(text[counter]))
                 {
                     //include any remaining digit characters
                     counter++;
-                    while(counter < text.size() && isdigit(text[counter]))
+                    while (counter < text.size() && isdigit(text[counter]))
                     {
                         counter++;
                     }
-                    tokens.push_back(number);
                     counter--;
+                    tokens.push_back(Token(text.substr(startCounter, counter-startCounter), number));
                 }
                 break;
+            }
             case '0':
             case '1':
             case '2':
@@ -94,6 +98,7 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
             case '8':
             case '9':
             {
+                int startCounter = counter;
                 counter++;
                 //check if a valid number (only one period (decimal) and as many digits, no letters)
                 bool decimalIncluded = false;
@@ -105,10 +110,9 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
                     }
                     counter++;
                 }
-
-                //(TODO: if need ending point its counter - 1)
-                tokens.push_back(number);
                 counter--;
+
+                tokens.push_back(Token(text.substr(startCounter, (counter - startCounter) + 1), number));
                 break;
             }
             case '\r':
@@ -129,26 +133,19 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
                         curID += text[counter];
                         counter++;
                     }
-
-                    //check if "read" or "write" keywords
-                    if(curID == "read")
-                    {
-                        tokens.push_back(read);
-                    }
-                    else if (curID == "write")
-                    {
-                        tokens.push_back(write);
-                    }
-                    else
-                    {
-                        tokens.push_back(id);
-                    }
-
                     counter--;
+
+                    //Check if "read" or "write" keywords otherwise its an "id"
+                    if (curID == "read")
+                        tokens.push_back(Token(text.substr(counter - 3, 4), read));
+                    else if (curID == "write")
+                        tokens.push_back(Token(text.substr(counter - 4, 5), write));
+                    else
+                        tokens.push_back(Token(text.substr(counter - (curID.size()-1), curID.size()), id));
                 }
                 else
                 {
-                    tokens.push_back(error);
+                    tokens.push_back(Token("", error));
                     return tokens;
                 }
         }
@@ -156,7 +153,7 @@ std::vector<TokenType> Scanner::PerformScan(std::string text)
     }
 
     //write an end of program token for parser to use
-    tokens.push_back(end);
+    tokens.push_back(Token("", end));
 
     return tokens;
 }
